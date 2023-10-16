@@ -1,0 +1,77 @@
+swagger: '2.0'
+info:
+  title: File Service API
+  version: '1.0'
+
+paths:
+  /api/files:
+    post:
+      operationId: app2.upload_file
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          description: The file to upload.
+          required: true
+        - in: formData
+          name: encryption_key
+          type: string
+          description: The encryption key for the file.
+          required: true
+      responses:
+        '201':
+          description: File uploaded successfully
+        '400':
+          description: Bad request
+    get:
+      operationId: app2.list_files
+      responses:
+        '200':
+          description: File list
+
+  /api/files/{file_id}:
+    get:
+      operationId: app2.download_file
+      parameters:
+        - in: path
+          name: file_id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: File content
+        '404':
+          description: File not found
+
+  /api/files/keyword:
+    post:
+      operationId: app2.download_by_keyword
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: keyword
+          type: string
+          description: The keyword to search for the file.
+          required: true
+        - in: formData
+          name: encryption_key
+          type: string
+          description: The decryption key for the file.
+          required: true
+      responses:
+        '200':
+          description: File content
+        '400':
+          description: Decryption failed
+        '404':
+          description: File not found
+
+  /api/serverinfo:
+    get:
+      operationId: app2.server_info
+      responses:
+        '200':
+          description: Server info
